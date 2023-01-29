@@ -275,6 +275,98 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
+# Rendering Performance with Virtual Lists
+
+---
+
+**Rendering Performance with Virtual Lists**
+
+-   Si intentamos recorrer una lista enorme con v-for, tendremos un impacto en el performance de nuestra app. Tendremos tanto una primera carga lenta, cómo un scroll muy laggy.
+
+-   La solución a esta situación pasa por el **_virtual scrolling_**, en concreto para listas, por el **_list virtualization_**
+
+-   Renderizaremos divs que estén cerca del viewport actual
+
+-   Lo más común es combinar el virtual scrolling con el infinite scrolling (paginación a la llegada al final de la lista actual)
+
+-   Visualización scroll v-for vs. virtual scroll
+
+---
+
+![bg w:400](./assets/12.png)
+![bg w:500](./assets/13.png)
+
+---
+
+-   Hay varias maneras de lograr el efecto deseado, pero en este caso vamos a ver la opción con el composable **_useVirtualList_** de VueUse
+
+-   Lo combinaríamos con **_useInfiniteScroll_** para lograr un efecto similar al que hacer twitter.
+
+-   El uso del composable **_useVirtualList_** nos ahorra realizar muchos cálculos y tiempo a la hora de pensar cómo hacer para que la zona a renderizar se corresponda correctamente con el scrollbar (vs el total de elementos de nuestra lista)
+
+-   Afortunadamente, este tipo de soluciones tan testadas y recomendadas nos permiten obtener ganancias de rendimiento de manera sencilla. Tendremos que instalar [VueUse](https://vueuse.org/)
+
+---
+
+```javascript
+<script setup>
+import { ref } from 'vue'
+import { useVirtualList } from '@vueuse/core'
+
+// Data -> [50] of loreipsum
+// We can use it as a ref or not. It's the same
+const data = ref(Array.from(Array(50).keys(), () => 'Lorem Ipsum'))
+
+// Properties returned by useVirtualList
+// list -> items that should actually be shown
+// containerProps -> ref for container element, inline styles, onScroll event
+// wrapperProps -> styles for our wrapper (like height + margin)
+
+const {list, containerProps, wrapperProps} = useVirtualList(data, {
+    itemHeight: 96 // Used for calculations
+    overscan: 5 // Numb of items to be rendered outside the viewport (up n down). Smoother scroll.
+})
+</script>
+```
+
+---
+
+```javascript
+<template>
+    <div v-bind="containerProps">
+        <div v-bind="wrapperProps">
+            <div
+                v-for="{index, data} in list"
+                :key="index"
+                class="item-card-class" // Height adds up to itemHeight!
+            >
+                <h2 class="h2-class">Item #{{index}}</h2>
+                <p class="p-class">{{data}}</p>
+            </div>
+        </div>
+    </div>
+</template>
+```
+
+---
+
+![bg w:1000](./assets/14.png)
+
+---
+
+-   Default overscan is 5
+
+![bg w:300](./assets/15.png)
+![bg w:300](./assets/16.png)
+
+---
+
+![bg w:1000](./assets/18.gif)
+
+---
+
+<!-- _class: lead -->
+
 # Conclusión
 
 ---
