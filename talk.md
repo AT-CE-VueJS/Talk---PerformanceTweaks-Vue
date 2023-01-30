@@ -36,7 +36,7 @@ marp: true
 -   Network Status Based UI
 -   Image Optimization with Nuxt Image
 -   Rendering Performance with Virtual Lists
--   ZZZ
+-   Rendering Performance with directives (avoid unnecessary re-render)
 
 ---
 
@@ -275,7 +275,28 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
-# Rendering Performance with Virtual Lists
+# Rendering Performance
+
+---
+
+**Rendering Performance**
+
+-   El performance de renderizado es una métrica muy importante para las aplicaciones web
+
+-   Por cada segundo que nuestra app tarda en renderizar, más probable es que el usuario salga de la misma
+
+-   La aplicación ha de sentirse responsive ante el input de los usuarios
+
+-   Vue tiene por defecto un performance bastante bueno
+
+-   Aún así, hay maneras en las que podemos mejorar este performance
+
+---
+
+1. Virtual Lists
+2. Eliminación de re-renderizaciónes innecesarias
+    - v-once
+    - v-memo
 
 ---
 
@@ -362,6 +383,83 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 ---
 
 ![bg w:1000](./assets/18.gif)
+
+---
+
+**Rendering Performance with v-once**
+
+-   Renderiza el elemento o componente una sola vez. Después de ese render inicial, ese elemento/componente y todos sus hijos, serán tratados cómo estáticos
+
+![w:600](./assets/19.png)
+
+---
+
+-   Para lograrlo, simplemente:
+
+```html
+<!-- v-once in a single html element -->
+<p v-once>{{myStaticMessage}}</p>
+
+<!-- v-once in an element with children -->
+<div v-once>
+    <p>{{message}}</p>
+</div>
+
+<!-- v-once in a component -->
+<my-component v-once />
+
+<!-- v-once in a v-for directive -->
+<ul>
+    <li v-for="item in list" :key="item" v-once>{{item}}</li>
+</ul>
+```
+
+---
+
+-   Consideraciones de v-once
+
+    -   Tratar con cuidado esta directiva. Aunque cambien los datos reactivos, el componente no se re-renderizará
+    -   La combinación de v-once con otras directivas puede tener efectos no-deseados, por la prioridad de este.
+
+    ```html
+    <!-- v-once with conditional components -->
+    <p v-if="show" v-once>{{myStaticMessage}}</p>
+    ```
+
+    -   En el ejemplo, aunque cambie el show, el componente no reaccionará
+
+-   Utilizaremos v-once sólo cuándo sepamos que un componente no se ha de re-renderizar aunque los datos se actualizen.
+
+---
+
+**Rendering Performance with v-memo**
+
+-   Si queremos limitar cuándo un elemento se ha de re-renderizar, pero sin limitarlo sólo a la primera vez, utilizaremos v-memo
+
+-   v-memo memoriza un sub-arbol de hijos de un componente y almacena renderizaciones previas para mejorar el performance
+
+-   Lo podemos utilizar en cualquier elemento y acepta un array de dependencias. Limitará la re-renderización a cuándo alguna de esas dependencias cambien.
+
+-   Importante: v-memo no funciona dentro de v-for, pero si al mismo nivel (en el mismo elemento que v-for si, pero no dentro)
+
+---
+
+-   El <p> se re-renderizará reactivamente ante el cambio de msg o de count
+
+```html
+<!-- v-memo and some dependencies -->
+<p v-memo="[msg, count]">{{msg}}, {{count}}</p>
+```
+
+-   Si utilizamos v-memo pero pasándole un array de dependencias vacío, obtenemos el mismo resultado que utilizando v-once, ya que no hay nada que haga trigger del re-render. Si no pasamos array, lo hace de manera inteligente
+
+![w:850](./assets/20.png)
+
+---
+
+-   La documentación oficial considera que v-memo debería de ser utilizado sólo en micro-optimizaciones en escenarios de performance crítico (no utilizarlo by-default)
+
+-   El uso más popular es a la hora de renderizar listas con muchos registros (length > 1000)
 
 ---
 
