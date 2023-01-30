@@ -23,8 +23,8 @@ marp: true
 
 <!-- _class: lead -->
 
--   Vue destaca por: Simplicidad y pocas restricciones + Buena comunidad.
--   Buena base con todo lo necesario y muy ampliable con libertad.
+-   Vue destaca por: Simplicidad y pocas restricciones + gran comunidad. (grande en cuánto a calidad que no a tamaño)
+-   Buena base con todo lo necesario (para montar un proyecto bastante completo) y muy ampliable con libertad.
 -   Cantidad de tweaks tanto de performance cómo visuales o de ahorro de recursos.
 
 ---
@@ -33,10 +33,24 @@ marp: true
 
 # Algunos tweaks útiles (hay muchos más)
 
--   1. Network Status Based UI
--   2. Image Optimization with Nuxt Image
--   3.1 Rendering Performance with Virtual Lists
--   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   1.  Network Status Based UI
+-   2.  Image Optimization with Nuxt Image
+-   3.  Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   4. One Line Animations
+
+---
+
+<!-- _class: lead -->
+
+Índice
+
+-   **_1. Network Status Based UI_**
+-   2.  Image Optimization with Nuxt Image
+-   3.  Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
 -   4. One Line Animations
 
 ---
@@ -45,15 +59,17 @@ marp: true
 
 # 1. Network Status Based UI / UX
 
+UI/UX basada en el estado de la red
+
 ---
 
 **Network Status Based UI / UX**
 
--   Ideales en situaciones en las que tenemos una conexión a internet lenta / inestable.
+-   Ideales en situaciones en las que tenemos una conexión a internet lenta / inestable (mercados emergentes).
 -   Útil para informar a los usuarios del estado de la conexión
 -   Muy utilizado en sitios de streaming (regulación del bitrate), o de edición de documentos onLine.
--   Nota: Las funciones (useNetwork, useOnline) de VueUse ya implementan esto.
--   Veremos cómo hacerlo "a mano"
+-   Nota: Las funciones (useNetwork, useOnline) de **VueUse** ya implementan esto.
+-   Veremos cómo hacerlo VanillaJS cómo excepción
 
 ---
 
@@ -87,11 +103,11 @@ window.addEventListener("offline", () => {
 
 ---
 
-**Ejemplo: Enviar versión lightweight de nuestra app**
+**Ejemplo: Enviar versión lightweight de recursos de nuestra app**
 
 -   Nos apoyaremos en "Network Information API" (experimental), aporta información adicional sobre la red del usuario.
 
--   Ejemplos:
+-   Ejemplo de propiedades de la instancia:
 
     -   NetworkInformation.downlink
     -   NetworkInformation.rtt
@@ -118,6 +134,8 @@ window.addEventListener("offline", () => {
 -   NetworkInformation.saveData -> Si el cliente tiene activada esta opción
 
 ![bg w:1200](./assets/6.png)
+
+-   La opción saveData se activa a veces autom. al hacer wifi tether.
 
 ---
 
@@ -180,6 +198,19 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
+Índice
+
+-   1. Network Status Based UI
+-   **_2. Image Optimization with Nuxt Image_**
+-   3.  Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   4. One Line Animations
+
+---
+
+<!-- _class: lead -->
+
 # 2. Image Optimization with [Nuxt Image](https://v1.image.nuxtjs.org/)
 
 ---
@@ -188,7 +219,7 @@ if (connection) { //the API is not available on every browser
 
 -   El performance de nuestra web impacta todo (ux, ratios conversión, usabilidad, etc).
 
--   Lo que más impacta al performance es la candidad de datos que el usuario ha de descargar.
+-   Lo que más impacta al performance (+ tiempo) es la candidad de datos que el usuario ha de descargar. (junto con el renderizado, que abordaremos más adelante y añade consumo cpu y ram)
 
 -   Hay varias maneras de reducir esta cantidad de datos, una de las más comunes siendo la optimización de imágenes.
 
@@ -235,7 +266,7 @@ if (connection) { //the API is not available on every browser
 <template>
     <nuxt-img
         src="/image.png"
-        sizes="sm:100px md:300px lg:900px"
+        sizes="sm:100px md:300px lg:900px" <!-- Dynamic sizing depending on viewport  real state-->
         format="webp"
     />
 </template>
@@ -276,6 +307,19 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
+Índice
+
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   **_3. Rendering performance_**
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   4. One Line Animations
+
+---
+
+<!-- _class: lead -->
+
 # 3. Rendering Performance
 
 ---
@@ -284,7 +328,7 @@ if (connection) { //the API is not available on every browser
 
 -   El performance de renderizado es una métrica muy importante para las aplicaciones web
 
--   Por cada segundo que nuestra app tarda en renderizar, más probable es que el usuario salga de la misma
+-   Por cada segundo que nuestra app tarda en renderizar, más probable que el usuario salga de la misma
 
 -   La aplicación ha de sentirse responsive ante el input de los usuarios
 
@@ -301,6 +345,19 @@ if (connection) { //the API is not available on every browser
 
 ---
 
+<!-- _class: lead -->
+
+Índice
+
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   3. Rendering performance
+    -   **_3.1 Rendering Performance with Virtual Lists_**
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   4. One Line Animations
+
+---
+
 **3.1 - Rendering Performance with Virtual Lists**
 
 -   Si intentamos recorrer una lista enorme con v-for, tendremos un impacto en el performance de nuestra app. Tendremos tanto una primera carga lenta, cómo un scroll muy laggy.
@@ -309,7 +366,7 @@ if (connection) { //the API is not available on every browser
 
 -   Renderizaremos divs que estén cerca del viewport actual
 
--   Lo más común es combinar el virtual scrolling con el infinite scrolling (paginación a la llegada al final de la lista actual)
+-   Lo más común es combinar el virtual scrolling con el infinite scrolling (paginación +1 a la llegada al final de la lista actual)
 
 -   Visualización scroll v-for vs. virtual scroll
 
@@ -339,7 +396,7 @@ import { useVirtualList } from '@vueuse/core'
 // We can use it as a ref or not. It's the same
 const data = ref(Array.from(Array(50).keys(), () => 'Lorem Ipsum'))
 
-// Properties returned by useVirtualList
+// Properties returned by useVirtualList composable
 // list -> items that should actually be shown
 // containerProps -> ref for container element, inline styles, onScroll event
 // wrapperProps -> styles for our wrapper (like height + margin)
@@ -355,12 +412,12 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 
 ```javascript
 <template>
-    <div v-bind="containerProps">
-        <div v-bind="wrapperProps">
+    <div v-bind="containerProps"> <!-- containerProps ok! -->
+        <div v-bind="wrapperProps"> <!-- wrapperProps ok! -->
             <div
                 v-for="{index, data} in list"
                 :key="index"
-                class="item-card-class" // Height adds up to itemHeight!
+                class="item-card-class" <!-- Height adds up to itemHeight! -->
             >
                 <h2 class="h2-class">Item #{{index}}</h2>
                 <p class="p-class">{{data}}</p>
@@ -384,6 +441,21 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 ---
 
 ![bg w:1000](./assets/18.gif)
+
+---
+
+<!-- _class: lead -->
+
+Índice
+
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   3. Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+        -   **_3.2.1 - v-once_**
+        -   3.2.1 - v-memo
+-   4. One Line Animations
 
 ---
 
@@ -433,13 +505,28 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 
 ---
 
+<!-- _class: lead -->
+
+Índice
+
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   3. Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+        -   3.2.1 - v-once
+        -   **_3.2.1 - v-memo_**
+-   4. One Line Animations
+
+---
+
 **3.2.2 - Rendering Performance with v-memo**
 
 -   Si queremos limitar cuándo un elemento se ha de re-renderizar, pero sin limitarlo sólo a la primera vez, utilizaremos v-memo
 
 -   v-memo memoriza un sub-arbol de hijos de un componente y almacena renderizaciones previas para mejorar el performance
 
--   Lo podemos utilizar en cualquier elemento y acepta un array de dependencias. Limitará la re-renderización a cuándo alguna de esas dependencias cambien.
+-   Lo podemos utilizar en cualquier elemento y acepta un array de dependencias. Limitará la re-renderización a cuándo alguna de esas dependencias cambien. Sin aarray lo hace "smart reactive"
 
 -   Importante: v-memo no funciona dentro de v-for, pero si al mismo nivel (en el mismo elemento que v-for si, pero no dentro)
 
@@ -461,6 +548,19 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 -   La documentación oficial considera que v-memo debería de ser utilizado sólo en micro-optimizaciones en escenarios de performance crítico (no utilizarlo by-default)
 
 -   El uso más popular es a la hora de renderizar listas con muchos registros (length > 1000)
+
+---
+
+<!-- _class: lead -->
+
+Índice
+
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   3.  Rendering performance
+    -   3.1 Rendering Performance with Virtual Lists
+    -   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   **_4. One Line Animations_**
 
 ---
 
@@ -511,14 +611,14 @@ Local
 
 ```javascript
 <script setup>
-import { vAutoAnimate } from '@formkit/auto-animate'
+import { vAutoAnimate } from '@formkit/auto-animate' <!--import-->
 import { ref } from 'vue'
 
 const isOpen = ref(false)
 </script>
 
 <template>
-    <div v-auto-animate class="p8 rounded-lg bg-neutral-900">
+    <div v-auto-animate class="p8 rounded-lg bg-neutral-900"> <!--apply-->
         <h2
             @click="isOpen = !isOpen" class="text-xl font-bold">
             Card Header
