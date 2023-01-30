@@ -466,13 +466,74 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 
 <!-- _class: lead -->
 
+# 4. One-Line Animations [Auto Animate](https://auto-animate.formkit.com/)
+
+---
+
+**One Line Animations**
+
+-   Otra mejora que podemos llevar a cabo en nuestra aplicación es la del aspecto estético (con animaciones por ejemplo)
+
+-   Para ser óptimos, tanto con las animaciones (performance) cómo con el tiempo que nos lleva implementarlas, nos podemos servir de herramientas.
+
+-   Echaremos un ojo a [Auto Animate](https://auto-animate.formkit.com/)
+
+-   Destaca por ser **zero** config y muy óptimo en cuánto a rendimiento. Además, funciona con cualquier app JavaScript (no está limitado a VueJS)
+
+-   Podemos importarla globar o localmente. Expondrá directiva.
+
+---
+
+Global
+
+![bg w:1050](./assets/21.png)
+
+---
+
+Local
+
+![bg w:950](./assets/22.png)
+
+---
+
+-   Esencialmente, autoAnimate es una función que acepta un elemento, para luego animar ese elemento padre y sus hijos inmediatos cuándo:
+    -   Elemento hijo se añade al DOM
+    -   Elemento hijo se elimina del DOM
+    -   Elemento hijo se mueve en el DOM
+
+![w:550](./assets/23.png)
+
+---
+
+-   Ejemplo en que contamos con un div "header", el cual al ser clickado nos "abre" / "muestra" un <p>. La diferencia entre nos "muestra" y nos "abre", nos la aporta auto animate, utilizando un par de líneas.
+
+---
+
+```javascript
+<script>
+
+</script>
+<template>
+</template>
+```
+
+---
+
+<!-- _class: lead -->
+
 # Conclusión
 
 ---
 
 **Conclusión**
 
--   Vue rocks
+-   Vue nos da una base muy sólida para desarrollar proyectos bastante optimizados en cuánto a performance, a la vez que nos aporta la libertad necesaria para hacer lo que queramos
+
+-   Está muy bien contar con opciones de mejoras de rendimiento tanto nativas de JS, nativas de vue o de terceros.
+
+-   Es importante priorizar el performance de nuestra webapp para aportar una experiencia de usuario responsive y agradable.
+
+-   Estas son sólo algunos ejemplos, hay todo un mundo dedicado a este tipo de mejoras. Destaca el canal de youtube: [LearnVue](https://www.youtube.com/@LearnVue/)
 
 ---
 
