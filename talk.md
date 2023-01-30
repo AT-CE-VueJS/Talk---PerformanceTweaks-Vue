@@ -11,7 +11,7 @@ marp: true
 
 # Tweaks útiles en VueJS
 
-## Network Status Based UI / UX, Image Optimization, Rendering Performance y ZZZ
+## Network Status Based UI / UX, Image Optimization, Rendering Performance y Animations
 
 ---
 
@@ -33,16 +33,17 @@ marp: true
 
 # Algunos tweaks útiles (hay muchos más)
 
--   Network Status Based UI
--   Image Optimization with Nuxt Image
--   Rendering Performance with Virtual Lists
--   Rendering Performance with directives (avoid unnecessary re-render)
+-   1. Network Status Based UI
+-   2. Image Optimization with Nuxt Image
+-   3.1 Rendering Performance with Virtual Lists
+-   3.2 Rendering Performance with directives (avoid unnecessary re-render)
+-   4. One Line Animations
 
 ---
 
 <!-- _class: lead -->
 
-# Network Status Based UI / UX
+# 1. Network Status Based UI / UX
 
 ---
 
@@ -179,7 +180,7 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
-# Image Optimization with [Nuxt Image](https://v1.image.nuxtjs.org/)
+# 2. Image Optimization with [Nuxt Image](https://v1.image.nuxtjs.org/)
 
 ---
 
@@ -275,7 +276,7 @@ if (connection) { //the API is not available on every browser
 
 <!-- _class: lead -->
 
-# Rendering Performance
+# 3. Rendering Performance
 
 ---
 
@@ -300,7 +301,7 @@ if (connection) { //the API is not available on every browser
 
 ---
 
-**Rendering Performance with Virtual Lists**
+**3.1 - Rendering Performance with Virtual Lists**
 
 -   Si intentamos recorrer una lista enorme con v-for, tendremos un impacto en el performance de nuestra app. Tendremos tanto una primera carga lenta, cómo un scroll muy laggy.
 
@@ -386,7 +387,7 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 
 ---
 
-**Rendering Performance with v-once**
+**3.2.1 - Rendering Performance with v-once**
 
 -   Renderiza el elemento o componente una sola vez. Después de ese render inicial, ese elemento/componente y todos sus hijos, serán tratados cómo estáticos
 
@@ -432,7 +433,7 @@ const {list, containerProps, wrapperProps} = useVirtualList(data, {
 
 ---
 
-**Rendering Performance with v-memo**
+**3.2.2 - Rendering Performance with v-memo**
 
 -   Si queremos limitar cuándo un elemento se ha de re-renderizar, pero sin limitarlo sólo a la primera vez, utilizaremos v-memo
 
